@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Title>Umbraco Workflow Data Generator</Title>
+    <Description>Generate a test environment for new Umbraco Workflow installations.</Description>
+    <PackageTags>umbraco umbraco-cms umbraco-workflow</PackageTags>
+    <StaticWebAssetBasePath>App_Plugins/Umbraco.Workflow.DataGenerator</StaticWebAssetBasePath>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms.Api.Common" Version="[13.0.0-rc3, 14)" />
+    <PackageReference Include="Umbraco.Workflow" Version="[13.0.0-rc2, 14)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="buildTransitive\**" PackagePath="buildTransitive" />
+    <Content Update="appsettings-schema.Umbraco.Workflow.DataGenerator.json" PackagePath="" />
+  </ItemGroup>
+
+  <!-- Build client assets using NPM -->
+  <Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
+  <Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
+    <WriteLinesToFile File="ClientApp\gulp\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" WriteOnlyWhenDifferent="true" />
+  </Target>
+  <ItemGroup>
+    <ClientAssetsInputs Remove="ClientApp\gulp\scss.js" />
+    <ClientAssetsInputs Remove="ClientApp\gulp\views.js" />
+    <ClientAssetsInputs Remove="clientapp\src\index.ts" />
+  </ItemGroup>
+
+</Project>

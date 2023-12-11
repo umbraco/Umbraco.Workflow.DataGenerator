@@ -1,0 +1,39 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Company>Umbraco HQ</Company>
+    <Authors>Umbraco</Authors>
+    <Copyright>Copyright © Umbraco $([System.DateTime]::Today.ToString('yyyy'))</Copyright>
+    <Product>Umbraco Workflow Data Generator</Product>
+    <PackageProjectUrl>https://umbraco.com/products</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--<EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>12.0.0</PackageValidationBaselineVersion>
+    <EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
+    <EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
+    <GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="Umbraco.Code" Version="2.0.0" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="Umbraco.GitVersioning.Extensions" Version="0.2.0" PrivateAssets="all" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)</GitVersionBaseDirectory>
+  </PropertyGroup>
+</Project>

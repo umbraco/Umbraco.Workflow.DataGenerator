@@ -1,0 +1,12 @@
+{
+    "id": "Umbraco.Workflow.DataGenerator",
+    "name": "Umbraco Workflow Data Generator",
+    "allowPackageTelemetry": true,
+    "bundleOptions": "None",
+    "javascript": [
+        "~/App_Plugins/Umbraco.DataGenerator/backoffice/index.js"
+    ],
+    "css": [
+        "~/App_Plugins/Workflow.DataGenerator/backoffice/styles.min.css"
+    ]
+}

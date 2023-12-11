@@ -1,0 +1,15 @@
+.workflow-generator {
+    .umb-toggle.umb-toggle--checked .umb-toggle__toggle,
+    .umb-toggle__toggle {
+        background: var(--uui-color-current);
+        border-color: var(--uui-color-current-standalone);
+    }
+
+    .umb-toggle__label {
+        color:#fff;
+    }
+
+    svg {
+        fill: var(--uui-color-danger-standalone);
+    }
+}

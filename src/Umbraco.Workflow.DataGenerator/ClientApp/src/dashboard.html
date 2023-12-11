@@ -1,0 +1,93 @@
+<div
+  class="workflow workflow-generator"
+  ng-controller="Workflow.GeneratorDashboard.Controller as vm"
+>
+<button ng-click="vm.tour()" type="button">Tour</button>
+  <div class="umb-package-details">
+    <div class="umb-package-details__main-content">
+      <umb-box>
+        <umb-box-header title="Data generation tools"></umb-box-header>
+        <umb-box-content>
+          <div
+            class="alert alert-info"
+            ng-if="!vm.hasExistingUmbracoData && !vm.hasInstalledUmbracoData"
+          >
+            <p>
+              <strong>Umbraco is empty!</strong> Generating Workflow test data
+              will also add content, document types and data types.
+            </p>
+          </div>
+
+          <div class="alert alert-info" ng-if="vm.hasExistingUmbracoData">
+            <p>
+              <strong>Umbraco is not empty!</strong> Generating Workflow test
+              data will only add Workflow configuration - it won't touch
+              existing Umbraco data.
+            </p>
+          </div>
+
+          <div class="alert alert-info" ng-if="vm.hasInstalledWorkflowData">
+            <p>
+              <strong>Workflow data has been generated!</strong> Reset the environment before regenerating
+            </p>
+          </div>
+
+          <ng-form
+            name="workflowDataGenerationForm"
+            class="form-horizontal d-block"
+            ng-if="!vm.hasInstalledWorkflowData"
+            novalidate
+            val-form-manager
+          >
+            <umb-property
+              property="property"
+              alias="{{ property.alias }}"
+              ng-repeat="property in vm.baseProperties"
+            >
+              <umb-property-editor model="property"></umb-property-editor>
+            </umb-property>
+
+            <div class="flex mt3 justify-end">
+              <umb-button
+                type="button"
+                button-style="success"
+                shortcut="ctrl+s"
+                state="vm.generateState"
+                label-key="workflow_generateData"
+                action="vm.generate()"
+              >
+              </umb-button>
+            </div>
+          </ng-form>
+        </umb-box-content>
+      </umb-box>
+    </div>
+    <div class="umb-package-details__sidebar">
+      <umb-box
+        ng-if="vm.hasInstalledUmbracoData || vm.hasInstalledWorkflowData"
+      >
+        <umb-box-header title="Environment reset"></umb-box-header>
+        <umb-box-content>
+          <div class="alert alert-warning">
+            <p>
+              <strong>This is a destructive action!</strong> Resetting the
+              environment will remove all installed content, document types and
+              data types, and all Workflow configuration. Data NOT created by
+              this tool will not be modified.
+            </p>
+          </div>
+          <div class="flex mt3 justify-end">
+            <umb-button
+              type="button"
+              button-style="warning"
+              state="vm.resetState"
+              label-key="workflow_resetEnvironment"
+              action="vm.reset()"
+            >
+            </umb-button>
+          </div>
+        </umb-box-content>
+      </umb-box>
+    </div>
+  </div>
+</div>

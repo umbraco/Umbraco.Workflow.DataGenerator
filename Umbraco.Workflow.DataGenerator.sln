@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34310.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Workflow.DataGenerator", "src\Umbraco.Workflow.DataGenerator\Umbraco.Workflow.DataGenerator.csproj", "{401B0CFB-03EC-4E8F-B7A5-F16D05455BD2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FC1A349C-8697-4508-BC3F-B741B9D7675D}"
+	ProjectSection(SolutionItems) = preProject
+		.artifactignore = .artifactignore
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		.globalconfig = .globalconfig
+		azure-pipelines.yml = azure-pipelines.yml
+		Directory.Build.props = Directory.Build.props
+		global.json = global.json
+		icon.png = icon.png
+		NuGet.config = NuGet.config
+		README.md = README.md
+		version.json = version.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Workflow.DataGenerator.TestSite", "examples\Umbraco.Workflow.DataGenerator.TestSite\Umbraco.Workflow.DataGenerator.TestSite.csproj", "{D9736E49-4CB8-46CC-83D9-3A6D87FC8ADC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{0AC14943-D945-41BF-84B5-0A5CD868F326}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{401B0CFB-03EC-4E8F-B7A5-F16D05455BD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{401B0CFB-03EC-4E8F-B7A5-F16D05455BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{401B0CFB-03EC-4E8F-B7A5-F16D05455BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{401B0CFB-03EC-4E8F-B7A5-F16D05455BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9736E49-4CB8-46CC-83D9-3A6D87FC8ADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9736E49-4CB8-46CC-83D9-3A6D87FC8ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9736E49-4CB8-46CC-83D9-3A6D87FC8ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9736E49-4CB8-46CC-83D9-3A6D87FC8ADC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D9736E49-4CB8-46CC-83D9-3A6D87FC8ADC} = {0AC14943-D945-41BF-84B5-0A5CD868F326}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B431E19-1818-42EB-8DD8-BBAC4AFE2738}
+	EndGlobalSection
+EndGlobal
