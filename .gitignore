@@ -477,7 +477,7 @@ $RECYCLE.BIN/
 *.lnk
 
 ##
-## Umbraco Licenses specific
+## Umbraco Workflow DataGenerator specific
 ##
 /examples/**/appsettings.Local.json
-/src/Umbraco.Licenses/ClientApp/gulp/config.outputPath.js
+/src/Umbraco.Workflow.DataGenerator/ClientApp/gulp/config.outputPath.js
