@@ -4,7 +4,7 @@
     "allowPackageTelemetry": true,
     "bundleOptions": "None",
     "javascript": [
-        "~/App_Plugins/Umbraco.DataGenerator/backoffice/index.js"
+        "~/App_Plugins/Workflow.DataGenerator/backoffice/index.js"
     ],
     "css": [
         "~/App_Plugins/Workflow.DataGenerator/backoffice/styles.min.css"

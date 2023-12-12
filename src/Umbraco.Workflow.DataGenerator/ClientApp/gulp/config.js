@@ -13,7 +13,6 @@ export const paths = {
   scss: `${backofficePath}/**/*.scss`,
   lang: `${backofficePath}/lang/*.xml`,
   manifest: `${backofficePath}/**/package.manifest`,
-  tour: `${backofficePath}/**/*.tour.json`,
   dest: outputPath,
 };
 

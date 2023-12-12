@@ -1,0 +1,72 @@
+<div class="workflow workflow-generator"
+     ng-controller="Workflow.GeneratorDashboard.Controller as vm">
+    <div class="umb-package-details">
+        <div class="umb-package-details__main-content">
+            <umb-box ng-if="!vm.hasInstalledWorkflowData">
+                <umb-box-header title-key="workflowData_dataGenTools"></umb-box-header>
+                <umb-box-content>
+                    <ng-form name="workflowDataGenerationForm"
+                             class="form-horizontal d-block"
+                             novalidate
+                             val-form-manager>
+                        <umb-property property="property"
+                                      alias="{{ property.alias }}"
+                                      ng-repeat="property in vm.baseProperties">
+                            <umb-property-editor model="property"></umb-property-editor>
+                        </umb-property>
+
+                        <div class="flex mt3 justify-end">
+                            <umb-button type="button"
+                                        button-style="success"
+                                        shortcut="ctrl+s"
+                                        state="vm.generateState"
+                                        label-key="workflowData_generate"
+                                        action="vm.generate()">
+                            </umb-button>
+                        </div>
+                    </ng-form>
+                </umb-box-content>
+            </umb-box>
+            <umb-box ng-if="vm.hasInstalledWorkflowData">
+                <umb-box-header title-key="workflowData_resetEnvironment"></umb-box-header>
+                <umb-box-content>
+                    <div class="alert alert-warning">
+                        <p>
+                            <strong><localize key="workflowData_destructiveAction">This is a destructive action!</localize></strong>
+                            <localize key="workflowData_destructiveActionMessage">Resetting the environment will remove all Workflow configuration.</localize>
+                        </p>
+                    </div>
+                    <div class="flex mt3 justify-end">
+                        <umb-button type="button"
+                                    button-style="warning"
+                                    state="vm.resetState"
+                                    label-key="workflowData_resetEnvironment"
+                                    action="vm.reset()">
+                        </umb-button>
+                    </div>
+                </umb-box-content>
+            </umb-box>
+        </div>
+        <div class="umb-package-details__sidebar">
+            <umb-box ng-if="vm.hasInstalledWorkflowData">
+                <umb-box-header title-key="workflowData_takeATour"></umb-box-header>
+                <umb-box-content>
+                    <div class="umb-help-list">
+                        <div class="umb-help-list-item" ng-repeat="tour in vm.tours">
+                            <div class="umb-help-list-item__content justify-between">
+                                <div class="flex items-center">
+                                    <div ng-if="!tour.completed" class="umb-number-badge umb-number-badge--xs umb-help-list-item__icon">{{ $index + 1 }}</div>
+                                    <umb-checkmark ng-if="tour.completed" size="xs" checked="tour.completed" class="umb-help-list-item__icon"></umb-checkmark>
+                                    <span ng-class="{'strike': tour.completed}" class="umb-help-list-item__title">{{ tour.name }}</span>
+                                </div>
+                                <div>
+                                    <umb-button button-style="primary" type="button" label-key="workflowData_start" action="vm.startTour(tour)"></umb-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </umb-box-content>
+            </umb-box>
+        </div>
+    </div>
+</div>

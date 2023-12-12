@@ -1,10 +1,6 @@
-using System.IO.Compression;
-using System.Xml.Linq;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Packaging;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Workflow.DataGenerator.Configuration.Umbraco;
-using Umbraco.Workflow.DataGenerator.Configuration.Workflow;
+using Umbraco.Workflow.DataGenerator.Configuration;
 using Umbraco.Workflow.DataGenerator.Models;
 
 namespace Umbraco.Workflow.DataGenerator.Services;
@@ -13,105 +9,43 @@ internal sealed class DataGeneratorService : IDataGeneratorService
 {
     private readonly IWorkflowConfigurator _workflowConfigurator;
     private readonly IContentService _contentService;
-    private readonly IUmbracoHousekeeper _umbracoHousekeeper;
-    private readonly IPackageInstaller _packageInstaller;
     private readonly IWorkflowDestructor _workflowDestructor;
 
     public DataGeneratorService(
         IContentService contentService,
         IWorkflowConfigurator workflowConfigurator,
-        IUmbracoHousekeeper umbracoHousekeeper,
-        IPackageInstaller packageInstaller,
         IWorkflowDestructor workflowDestructor)
     {
         _contentService = contentService;
         _workflowConfigurator = workflowConfigurator;
-        _umbracoHousekeeper = umbracoHousekeeper;
-        _packageInstaller = packageInstaller;
         _workflowDestructor = workflowDestructor;
     }
 
-    public GeneratorStatusModel GetStatus() => _workflowConfigurator.GetStatus();
-
-    public async Task Reset(GeneratorStatusModel currentStatus, GeneratorStatusModel futureStatus)
+    public async Task Reset()
     {
-        _workflowConfigurator.SetStatus(futureStatus);
-
-        if (currentStatus.HasInstalledUmbracoData)
-        {
-            await CleanupUmbraco();
-        }
-
         await _workflowDestructor.Armageddon();
+        _workflowConfigurator.SetStatus(false);
     }
 
     /// <inheritdoc/>
-    public void DismissTour()
-    {
-        GeneratorStatusModel status = _workflowConfigurator.GetStatus();
-        status.HasDismissedTour = true;
-        _workflowConfigurator.SetStatus(status);
-    }
+    public bool GetStatus() => _workflowConfigurator.GetStatus();
 
     /// <inheritdoc/>
-    public async Task<InstallationSummary?> TryGenerate(WorkflowDataGeneratorRequestModel model)
+    public async Task<bool> TryGenerate(WorkflowDataGeneratorRequestModel model)
     {
-        // before anything happens, we need to preemptively update the status, as the installation/reset
-        // will restart the application, so we lose state. We update status before any actions are taken,
-        // which has the obvious risk that the status won't actually reflect the final state.
-        GeneratorStatusModel currentStatus = _workflowConfigurator.GetStatus();
-        GeneratorStatusModel futureStatus = new()
+        bool hasData = _workflowConfigurator.GetStatus();
+
+        if (hasData)
         {
-            HasExistingUmbracoData = currentStatus.HasExistingUmbracoData,
-            HasInstalledUmbracoData = !currentStatus.HasExistingUmbracoData,
-            HasInstalledWorkflowData = currentStatus.WorkflowDataModel is not null,
-            WorkflowDataModel = model,
-        };
-
-        _workflowConfigurator.SetStatus(futureStatus);
-
-        // cleanup first - status is the future state
-        //await Reset(currentStatus, futureStatus);
-
-        // only install if nothing exists already
-        if (!currentStatus.HasExistingUmbracoData || !currentStatus.HasInstalledUmbracoData)
-        {
-            (XDocument? packageXml, ZipArchive? zipArchive) = await _packageInstaller.TryGetRemotePackage();
-            if (packageXml is null)
-            {
-                return null;
-            }
-
-            // install starter site
-            _ = _packageInstaller.Install(packageXml, zipArchive);
-            _packageInstaller.Publish();
+            await _workflowDestructor.Armageddon();
         }
 
-        // populate
-        await ConfigureWorkflow(model);
-
-        // update the status to ensure next visit in the backoffice
-        // doesn't re-reun any installer steps
-        futureStatus.HasInstalledWorkflowData = true;
-        futureStatus.WorkflowDataModel = null;
-        _workflowConfigurator.SetStatus(futureStatus);
-
-        // do something with this to generate a useful return type
-        return null;
+        bool result = await ConfigureWorkflow(model);
+        _workflowConfigurator.SetStatus(result);
+        return result;
     }
 
-    private async Task CleanupUmbraco()
-    {
-        await _umbracoHousekeeper.RemoveExistingContent();
-
-        _umbracoHousekeeper.RemoveNonCoreDatatypes();
-        _umbracoHousekeeper.RemoveExistingUsers();
-        _umbracoHousekeeper.RemoveExistingMedia();
-        _umbracoHousekeeper.RemoveExistingFileAssets();
-        _umbracoHousekeeper.RemoveExistingMacros();
-    }
-
-    private async Task ConfigureWorkflow(WorkflowDataGeneratorRequestModel model)
+    private async Task<bool> ConfigureWorkflow(WorkflowDataGeneratorRequestModel model)
     {
         List<int> groupIds = [];
         List<int> userIds = [];
@@ -126,7 +60,7 @@ internal sealed class DataGeneratorService : IDataGeneratorService
 
         if (userIds.Count == 0)
         {
-            return;
+            return false;
         }
 
         for (var i = 1; i <= model.GroupCount; i += 1)
@@ -139,12 +73,14 @@ internal sealed class DataGeneratorService : IDataGeneratorService
 
         if (groupIds.Count == 0)
         {
-            return;
+            return false;
         }
 
         foreach (IContent root in _contentService.GetRootContent())
         {
             await _workflowConfigurator.TryAssignGroupPermissions(root, groupIds, model.GroupsPerWorkflow);
         }
+
+        return true;
     }
 }

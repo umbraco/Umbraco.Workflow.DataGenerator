@@ -26,10 +26,17 @@ internal sealed class ServerVariablesParsingNotificationHandler : INotificationH
             return;
         }
 
-        if (TryGetServerVars("umbracoUrls") is IDictionary<string, object?> umbracoUrls)
+        Dictionary<string, object?> serverVars = new()
         {
-            umbracoUrls["workflowDataGeneratorApiBaseUrl"] = _linkGenerator.GetUmbracoApiServiceBaseUrl<DataGeneratorApiController>(x => x.Reset());
+            ["apiBaseUrl"] = _linkGenerator.GetUmbracoApiServiceBaseUrl<DataGeneratorApiController>(x => x.Reset()),
+        };
+
+        if (TryGetServerVars("umbracoSettings") is IDictionary<string, object?> umbracoSettings)
+        {
+            serverVars["pluginPath"] = $"{umbracoSettings["appPluginsPath"]}/Workflow.DataGenerator/backoffice";
         }
+
+        notification.ServerVariables.Add("UmbracoWorkflowDataGenerator", serverVars);
 
         IDictionary<string, object?>? TryGetServerVars(string key)
         {

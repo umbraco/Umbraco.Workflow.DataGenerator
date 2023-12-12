@@ -15,11 +15,6 @@ function manifest() {
     .pipe(gulp.dest(paths.dest));
 }
 
-function tour() {
-  return gulp.src(paths.tour)
-    .pipe(gulp.dest(paths.dest + '/tours/'));
-}
-
 // Entry points
 export const build = gulp.task('build',
   gulp.series(
@@ -32,7 +27,6 @@ export const build = gulp.task('build',
       scss,
       views,
       lang,
-      tour,
       manifest
     )));
 
@@ -43,7 +37,6 @@ export const dev = gulp.task('dev',
       scss,
       views,
       lang,
-      tour,
       manifest
     ),
     done => {
@@ -54,6 +47,5 @@ export const dev = gulp.task('dev',
       gulp.watch(paths.views, gulp.series(views, js));
       gulp.watch(paths.lang, gulp.series(lang));
       gulp.watch(paths.manifest, gulp.series(manifest));
-      gulp.watch(paths.tour, gulp.series(tour));
       done();
     }));

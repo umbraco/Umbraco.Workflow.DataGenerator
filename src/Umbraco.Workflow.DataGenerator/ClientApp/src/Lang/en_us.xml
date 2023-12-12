@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="en" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+  <area alias="workflowData">
+    <key alias="dataGenTools">Data generation tools</key>
+    <key alias="resetEnvironment">Reset environment</key>
+    <key alias="takeATour">Take a tour</key>
+    <key alias="startTour">Start tour</key>
+    <key alias="generate">Generate data</key>
+    <key alias="start">Start</key>
+
+    <key alias="postInstallTitle">Workflow data generated!</key>
+    <key alias="postInstallContent">Workflow has added the requested users and approval groups to this site. This site is intended for testing and product evaluation only, please don't send it into production...</key>
+
+    <key alias="destructiveAction">This is a destructive action!</key>
+    <key alias="destructiveActionMessage">Resetting the environment will remove all Workflow configuration.</key>
+
+    <key alias="groupCount">Number of approval groups</key>
+    <key alias="userCount">Number of users</key>
+    <key alias="groupsPerWorkflow">Number of groups per workflow</key>
+    <key alias="usersPerGroup">Users per group</key>
+    <key alias="groupsPerWorkflowDescription">Set to 0 for random (default)</key>
+    <key alias="usersPerGroupDescription">Set to 0 for random (default)</key>
+  </area>
+</language>

@@ -18,7 +18,7 @@ parameters:
 
 variables:
   nodeVersion: 18.x
-  solution: Umbraco.Licenses.sln
+  solution: Umbraco.Workflow.DataGenerator.sln
   buildConfiguration: Release
   DOTNET_NOLOGO: true
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
