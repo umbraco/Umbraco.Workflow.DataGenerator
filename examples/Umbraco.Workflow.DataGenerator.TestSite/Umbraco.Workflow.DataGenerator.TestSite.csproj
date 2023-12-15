@@ -6,8 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms" Version="[13.0.0-rc5, 14)" />
-    <PackageReference Include="Umbraco.Workflow" Version="[13.0.0-rc2, 14)" />
+    <PackageReference Include="Umbraco.Cms" Version="[13.0.0, 14)" />
+    <PackageReference Include="Umbraco.Workflow" Version="[13.0.0, 14)" />
+    <!--<ProjectReference Include="..\..\..\Umbraco-Workflow-13\src\Umbraco.Workflow\Umbraco.Workflow.csproj" />-->
     <ProjectReference Include="..\..\src\Umbraco.Workflow.DataGenerator\Umbraco.Workflow.DataGenerator.csproj" />
   </ItemGroup>
 
