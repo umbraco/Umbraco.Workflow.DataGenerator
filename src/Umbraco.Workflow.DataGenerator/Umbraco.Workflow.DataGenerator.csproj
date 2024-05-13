@@ -3,7 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Title>Umbraco Workflow Data Generator</Title>
     <Description>Generate a test environment for new Umbraco Workflow installations.</Description>
-    <PackageTags>umbraco umbraco-cms umbraco-workflow</PackageTags>
+    <PackageTags>umbraco umbraco-cms umbraco-workflow umbraco-marketplace</PackageTags>
     <StaticWebAssetBasePath>App_Plugins/Workflow.DataGenerator</StaticWebAssetBasePath>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
