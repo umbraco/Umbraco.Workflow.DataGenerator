@@ -3,7 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Title>Umbraco Workflow Data Generator</Title>
     <Description>Generate a test environment for new Umbraco Workflow installations.</Description>
-    <PackageTags>umbraco umbraco-cms umbraco-workflow</PackageTags>
+    <PackageTags>umbraco umbraco-cms umbraco-workflow umbraco-marketplace</PackageTags>
     <StaticWebAssetBasePath>App_Plugins/Workflow.DataGenerator</StaticWebAssetBasePath>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Api.Common" Version="[13.0.0-rc3, 14)" />
-    <PackageReference Include="Umbraco.TheStarterKit" Version="[13.0.0-rc, 14)" />
-    <PackageReference Include="Umbraco.Workflow.Core" Version="[13.0.0-rc2, 14)" />
+    <PackageReference Include="Umbraco.Cms.Api.Common" Version="[13.0.0, 14)" />
+    <PackageReference Include="Umbraco.TheStarterKit" Version="[13.0.0, 14)" />
+    <PackageReference Include="Umbraco.Workflow.Core" Version="[13.0.0, 14)" />    
   </ItemGroup>
 
   <!-- Build client assets using NPM -->

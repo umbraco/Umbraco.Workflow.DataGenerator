@@ -38,7 +38,7 @@ export class GeneratorDashboardController {
 
   constructor(private wfGeneratorService, private tourService, private overlayService, private localizationService, private notificationsService) {
     this.baseProperties.forEach(async prop => {
-      const results = await this.localizationService.localizeMany([`workflowData_${prop.alias}`, `workflowData_${prop.alias}Description`]);
+      const results = await this.localizationService.localizeMany([`workflowDataGenerator_${prop.alias}`, `workflowDataGenerator_${prop.alias}Description`]);
       prop.label = results[0];
       if (results[1].startsWith('[')) return;
       prop.description = results[1];
@@ -73,13 +73,13 @@ export class GeneratorDashboardController {
   }
 
   async showNotificationOverlay() {
-    const [title, content] = [...(await this.localizationService.localizeMany(['workflowData_postInstallTitle', 'workflowData_postInstallContent']))];
+    const [title, content] = [...(await this.localizationService.localizeMany(['workflowDataGenerator_postInstallTitle', 'workflowDataGenerator_postInstallContent']))];
 
     const overlayModel = {
       title,
       content,
       view: `${Umbraco.Sys.ServerVariables.UmbracoWorkflow.viewsPath}overlays/html.overlay.html`,
-      submitButtonLabelKey: 'workflowData_startTour',
+      submitButtonLabelKey: 'workflowDataGenerator_startTour',
       submitButtonStyle: 'info',
       submit: () => {
         this.overlayService.close();

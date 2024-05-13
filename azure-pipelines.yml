@@ -93,8 +93,9 @@ stages:
               targetPath: $(Build.ArtifactStagingDirectory)/nupkg
               artifactName: nupkg
 
-          - task: PublishPipelineArtifact@1
-            displayName: Publish build output
-            inputs:
-              targetPath: $(Build.SourcesDirectory)
-              artifactName: build_output
+          # IGNORE BUILD OUTPUT
+          # - task: PublishPipelineArtifact@1
+          #   displayName: Publish build output
+          #   inputs:
+          #     targetPath: $(Build.SourcesDirectory)
+          #     artifactName: build_output

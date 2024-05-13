@@ -3,7 +3,7 @@
     <div class="umb-package-details">
         <div class="umb-package-details__main-content">
             <umb-box ng-if="!vm.hasInstalledWorkflowData">
-                <umb-box-header title-key="workflowData_dataGenTools"></umb-box-header>
+                <umb-box-header title-key="workflowDataGenerator_dataGenTools"></umb-box-header>
                 <umb-box-content>
                     <ng-form name="workflowDataGenerationForm"
                              class="form-horizontal d-block"
@@ -20,7 +20,7 @@
                                         button-style="success"
                                         shortcut="ctrl+s"
                                         state="vm.generateState"
-                                        label-key="workflowData_generate"
+                                        label-key="workflowDataGenerator_generate"
                                         action="vm.generate()">
                             </umb-button>
                         </div>
@@ -28,19 +28,19 @@
                 </umb-box-content>
             </umb-box>
             <umb-box ng-if="vm.hasInstalledWorkflowData">
-                <umb-box-header title-key="workflowData_resetEnvironment"></umb-box-header>
+                <umb-box-header title-key="workflowDataGenerator_resetEnvironment"></umb-box-header>
                 <umb-box-content>
                     <div class="alert alert-warning">
                         <p>
-                            <strong><localize key="workflowData_destructiveAction">This is a destructive action!</localize></strong>
-                            <localize key="workflowData_destructiveActionMessage">Resetting the environment will remove all Workflow configuration.</localize>
+                            <strong><localize key="workflowDataGenerator_destructiveAction">This is a destructive action!</localize></strong>
+                            <localize key="workflowDataGenerator_destructiveActionMessage">Resetting the environment will remove all Workflow configuration.</localize>
                         </p>
                     </div>
                     <div class="flex mt3 justify-end">
                         <umb-button type="button"
                                     button-style="warning"
                                     state="vm.resetState"
-                                    label-key="workflowData_resetEnvironment"
+                                    label-key="workflowDataGenerator_resetEnvironment"
                                     action="vm.reset()">
                         </umb-button>
                     </div>
@@ -49,7 +49,7 @@
         </div>
         <div class="umb-package-details__sidebar">
             <umb-box ng-if="vm.hasInstalledWorkflowData">
-                <umb-box-header title-key="workflowData_takeATour"></umb-box-header>
+                <umb-box-header title-key="workflowDataGenerator_takeATour"></umb-box-header>
                 <umb-box-content>
                     <div class="umb-help-list">
                         <div class="umb-help-list-item" ng-repeat="tour in vm.tours">
@@ -60,7 +60,7 @@
                                     <span ng-class="{'strike': tour.completed}" class="umb-help-list-item__title">{{ tour.name }}</span>
                                 </div>
                                 <div>
-                                    <umb-button button-style="primary" type="button" label-key="workflowData_start" action="vm.startTour(tour)"></umb-button>
+                                    <umb-button button-style="primary" type="button" label-key="workflowDataGenerator_start" action="vm.startTour(tour)"></umb-button>
                                 </div>
                             </div>
                         </div>
