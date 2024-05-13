@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language alias="en" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
-  <area alias="workflowData">
+  <area alias="workflowDataGenerator">
     <key alias="dataGenTools">Data generation tools</key>
     <key alias="resetEnvironment">Reset environment</key>
     <key alias="takeATour">Take a tour</key>

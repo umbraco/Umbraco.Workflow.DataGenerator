@@ -11,7 +11,7 @@ export const paths = {
   js: [`${backofficePath}/**/*.ts`],
   views: [`${backofficePath}/**/*.html`],
   scss: `${backofficePath}/**/*.scss`,
-  lang: `${backofficePath}/lang/*.xml`,
+  lang: `${backofficePath}/Lang/*.xml`,
   manifest: `${backofficePath}/**/package.manifest`,
   dest: outputPath,
 };
