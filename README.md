@@ -1,13 +1,10 @@
 # Umbraco Workflow Data Generator
 
-Umbraco Workflow Data Generator is an extension for Umbraco Workflow to generate a test/demo environment. 
+The Umbraco Workflow DataGenerator is a powerful extension designed to swiftly create Umbraco users, Workflow approval groups, and permissions.
 
-The package installs a starter kit, generates Umbraco users, generates Workflow approval groups, assigns users to groups and assigns groups to nodes.
+This tool allows you to quickly set up your testing or product evaluation environment by automatically generating all necessary Workflow configurations, saving you from the tedious task of manual setup.
 
-## Branching Strategy
+NB: This package should only be installed into an empty Umbraco installation. 
 
-The branching strategy in this repository follows a "gitflow" model:
+You can find more information about the package in the [Umbraco documentation](https://docs.umbraco.com/umbraco-workflow/data-generator/data-generator).
 
-- `main` contains the latest released version
-- `develop` contains the work for the next minor release
-- as needed `support/x.x.x` branches are introduced from tags used for updates to older versions

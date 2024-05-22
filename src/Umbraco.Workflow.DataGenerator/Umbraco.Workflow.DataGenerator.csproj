@@ -19,6 +19,10 @@
     <PackageReference Include="Umbraco.Workflow.Core" Version="[13.0.0, 14)" />    
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
   <!-- Build client assets using NPM -->
   <Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
   <Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
