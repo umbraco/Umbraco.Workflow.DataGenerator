@@ -24,13 +24,13 @@ export class GeneratorDashboardController {
       alias: "groupsPerWorkflow",
       view: "integer",
       value: 0,
-      min: 0,
+      min: 2,
     },
     {
       alias: "usersPerGroup",
       view: "integer",
       value: 0,
-      min: 0,
+      min: 2,
     },
   ];
   

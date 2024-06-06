@@ -52,19 +52,10 @@ internal sealed class WorkflowConfigurator : IWorkflowConfigurator
     /// <inheritdoc/>
     public async Task TryAssignGroupPermissions(IContent content, List<int> groupIds, int groupsPerWorkflow)
     {
-        IEnumerable<int> groupsToAssign = Enumerable.Empty<int>();
         Random r = new();
 
-        // if 0, get random number of groups
-        if (groupsPerWorkflow != 0)
-        {
-            groupsToAssign = groupIds.OrderBy(x => r.Next()).Take(groupsPerWorkflow);
-        }
-        else
-        {
-            int i = r.Next(1, Math.Min(2, groupIds.Count));
-            groupsToAssign = groupIds.OrderBy(x => r.Next()).Take(i);
-        }
+        // if 0, get random number of groups, minimum is two
+        IEnumerable<int> groupsToAssign = groupIds.OrderBy(x => r.Next()).Take(r.Next(2, groupsPerWorkflow == 0 ? groupIds.Count : groupsPerWorkflow));
 
         ConfigModel config = new()
         {
@@ -103,24 +94,15 @@ internal sealed class WorkflowConfigurator : IWorkflowConfigurator
             Alias = alias,
         });
 
-        if (result.Success == false)
+        if (result.Success is false)
         {
             return null;
         }
 
-        IEnumerable<int> usersToAssign = Enumerable.Empty<int>();
         Random r = new();
 
         // if 0, get random number of users
-        if (usersPerGroup != 0)
-        {
-            usersToAssign = userIds.OrderBy(x => r.Next()).Take(usersPerGroup);
-        }
-        else
-        {
-            int userCount = r.Next(1, Math.Min(1, userIds.Count));
-            usersToAssign = userIds.OrderBy(x => r.Next()).Take(userCount);
-        }
+        IEnumerable<int> usersToAssign = userIds.OrderBy(x => r.Next()).Take(r.Next(2, usersPerGroup == 0 ? userIds.Count : usersPerGroup));
 
         group.Users = usersToAssign
             .Select(id => new User2UserGroupViewModel() { GroupId = group.GroupId, UserId = id })

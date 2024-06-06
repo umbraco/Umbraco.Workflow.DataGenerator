@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Api.Common" Version="[13.0.0, 14)" />
+    <PackageReference Include="Umbraco.Cms.Api.Common" Version="13.3.2" />
     <PackageReference Include="Umbraco.TheStarterKit" Version="[13.0.0, 14)" />
-    <PackageReference Include="Umbraco.Workflow.Core" Version="[13.0.0, 14)" />   
+    <PackageReference Include="Umbraco.Workflow.Core" Version="13.0.7" />   
   </ItemGroup>
 
   <!-- Build client assets using NPM -->

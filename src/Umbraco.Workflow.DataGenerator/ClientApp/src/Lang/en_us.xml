@@ -16,9 +16,9 @@
 
     <key alias="groupCount">Number of approval groups</key>
     <key alias="userCount">Number of users</key>
-    <key alias="groupsPerWorkflow">Number of groups per workflow</key>
-    <key alias="usersPerGroup">Users per group</key>
-    <key alias="groupsPerWorkflowDescription">Set to 0 for random (default)</key>
-    <key alias="usersPerGroupDescription">Set to 0 for random (default)</key>
+    <key alias="groupsPerWorkflow">Maximum number of groups per workflow</key>
+    <key alias="usersPerGroup">Maximum number of users per group</key>
+    <key alias="groupsPerWorkflowDescription">Set to 0 for random between 2 and number of approval groups (default)</key>
+    <key alias="usersPerGroupDescription">Set to 0 for random between 2 and number of users (default)</key>
   </area>
 </language>

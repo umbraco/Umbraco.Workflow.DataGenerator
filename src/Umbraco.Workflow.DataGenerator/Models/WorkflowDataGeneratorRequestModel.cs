@@ -1,18 +1,18 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Umbraco.Workflow.DataGenerator.Models;
 
 public sealed class WorkflowDataGeneratorRequestModel
 {
-    [JsonProperty("userCount")]
+    [JsonPropertyName("userCount")]
     public int UserCount { get; set; }
 
-    [JsonProperty("groupCount")]
+    [JsonPropertyName("groupCount")]
     public int GroupCount { get; set; }
 
-    [JsonProperty("usersPerGroup")]
-    public int UsersPerGroup { get; set; }
+    [JsonPropertyName("usersPerGroup")]
+    public int UsersPerGroup { get; set; } = 0;
 
-    [JsonProperty("groupsPerWorkflow")]
-    public int GroupsPerWorkflow { get; set; }
+    [JsonPropertyName("groupsPerWorkflow")]
+    public int GroupsPerWorkflow { get; set; } = 0;
 }
