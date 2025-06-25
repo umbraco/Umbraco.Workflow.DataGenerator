@@ -42,17 +42,18 @@ internal sealed class DataGeneratorService : IDataGeneratorService
 
         bool result = await ConfigureWorkflow(model);
         _workflowConfigurator.SetStatus(result);
+
         return result;
     }
 
     private async Task<bool> ConfigureWorkflow(WorkflowDataGeneratorRequestModel model)
     {
-        List<int> groupIds = [];
-        List<int> userIds = [];
+        List<Guid> groupIds = [];
+        List<Guid> userIds = [];
 
         for (var i = 1; i <= model.UserCount; i += 1)
         {
-            if (await _workflowConfigurator.TryCreateUser(i) is int userId)
+            if (await _workflowConfigurator.TryCreateUser(i) is Guid userId)
             {
                 userIds.Add(userId);
             }
@@ -65,7 +66,7 @@ internal sealed class DataGeneratorService : IDataGeneratorService
 
         for (var i = 1; i <= model.GroupCount; i += 1)
         {
-            if (await _workflowConfigurator.TryCreateApprovalGroups(i, userIds, model.UsersPerGroup) is int groupId)
+            if (await _workflowConfigurator.TryCreateApprovalGroups(i, userIds, model.UsersPerGroup) is Guid groupId)
             {
                 groupIds.Add(groupId);
             }

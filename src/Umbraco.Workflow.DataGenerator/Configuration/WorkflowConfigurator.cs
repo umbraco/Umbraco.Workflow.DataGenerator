@@ -1,31 +1,33 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.PublishedCache;
 using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Workflow.Core.Models;
-using Umbraco.Workflow.Core.Models.Pocos;
-using Umbraco.Workflow.Core.Models.ViewModels;
+using Umbraco.Extensions;
+using Umbraco.Workflow.Core.ApprovalGroups.Services;
+using Umbraco.Workflow.Core.ApprovalGroups.ViewModels;
 using Umbraco.Workflow.Core.Services;
 
 namespace Umbraco.Workflow.DataGenerator.Configuration;
 
 internal sealed class WorkflowConfigurator : IWorkflowConfigurator
 {
+    public static readonly string EmailDomain = "@umbraco.workflow";
+
     private readonly IGroupService _groupService;
     private readonly IConfigService _configService;
     private readonly IUserService _userService;
     private readonly IContentService _contentService;
     private readonly IBackOfficeUserManager _userManager;
-    private readonly IReadOnlyUserGroup? _editorGroup;
     private readonly GlobalSettings _globalSettings;
     private readonly IKeyValueService _keyValueService;
+    private readonly IUserGroupService _userGroupService;
 
     private readonly string _defaultVariant;
-    public static readonly string EmailDomain = "@umbraco.workflow";
 
     public WorkflowConfigurator(
         IOptionsSnapshot<GlobalSettings> globalSettings,
@@ -35,7 +37,8 @@ internal sealed class WorkflowConfigurator : IWorkflowConfigurator
         IContentService contentService,
         IConfigService configService,
         IDefaultCultureAccessor defaultCultureAccessor,
-        IKeyValueService keyValueService)
+        IKeyValueService keyValueService,
+        IUserGroupService userGroupService)
     {
         _userService = userService;
         _groupService = groupService;
@@ -45,14 +48,13 @@ internal sealed class WorkflowConfigurator : IWorkflowConfigurator
         _globalSettings = globalSettings.Value;
         _defaultVariant = defaultCultureAccessor.DefaultCulture;
         _keyValueService = keyValueService;
-
-        _editorGroup = _userService.GetUserGroupByAlias("editor") as IReadOnlyUserGroup ?? throw new NullReferenceException(nameof(_editorGroup));
+        _userGroupService = userGroupService;
     }
 
     /// <inheritdoc/>
-    public async Task TryAssignGroupPermissions(IContent content, List<int> groupIds, int groupsPerWorkflow)
+    public async Task TryAssignGroupPermissions(IContent content, IEnumerable<Guid> groupIds, int groupsPerWorkflow)
     {
-        IEnumerable<int> groupsToAssign = Enumerable.Empty<int>();
+        IEnumerable<Guid> groupsToAssign = [];
         Random r = new();
 
         // if 0, get random number of groups
@@ -62,18 +64,17 @@ internal sealed class WorkflowConfigurator : IWorkflowConfigurator
         }
         else
         {
-            int i = r.Next(1, Math.Min(2, groupIds.Count));
+            int i = r.Next(1, Math.Min(2, groupIds.Count()));
             groupsToAssign = groupIds.OrderBy(x => r.Next()).Take(i);
         }
 
-        ConfigModel config = new()
+        DocumentConfigUpdateRequestModel config = new()
         {
-            Id = content.Id,
-            Permissions = groupsToAssign.Select((g, i) => new UserGroupPermissionsPoco()
+            Key = content.Key,
+            Variant = _defaultVariant,
+            Permissions = groupsToAssign.Select((g, i) => new ApprovalGroupDetailPermissionConfigModel()
             {
-                Variant = _defaultVariant,
-                NodeId = content.Id,
-                GroupId = g,
+                GroupUnique = g,
                 Permission = i,
             }),
         };
@@ -92,23 +93,24 @@ internal sealed class WorkflowConfigurator : IWorkflowConfigurator
     }
 
     /// <inheritdoc/>
-    public async Task<int?> TryCreateApprovalGroups(int i, List<int> userIds, int usersPerGroup)
+    public async Task<Guid?> TryCreateApprovalGroups(int i, IEnumerable<Guid> userIds, int usersPerGroup)
     {
         string alias = $"group-{i}";
         string name = $"Group {i}";
 
-        (OperationResult result, UserGroupViewModel group) = await _groupService.CreateUserGroupAsync(new()
+        Attempt<ApprovalGroupDetailResponseModel, ApprovalGroupOperationStatus> result = await _groupService.CreateUserGroupAsync(new()
         {
+            Unique = Guid.NewGuid(),
             Name = name,
             Alias = alias,
         });
 
-        if (result.Success == false)
+        if (result.Success is false || result.Result is not ApprovalGroupDetailResponseModel group)
         {
             return null;
         }
 
-        IEnumerable<int> usersToAssign = Enumerable.Empty<int>();
+        IEnumerable<Guid> usersToAssign = [];
         Random r = new();
 
         // if 0, get random number of users
@@ -118,48 +120,50 @@ internal sealed class WorkflowConfigurator : IWorkflowConfigurator
         }
         else
         {
-            int userCount = r.Next(1, Math.Min(1, userIds.Count));
+            int userCount = r.Next(1, Math.Min(1, userIds.Count()));
             usersToAssign = userIds.OrderBy(x => r.Next()).Take(userCount);
         }
 
         group.Users = usersToAssign
-            .Select(id => new User2UserGroupViewModel() { GroupId = group.GroupId, UserId = id })
+            .Select(userUnique => new User2ApprovalGroupViewModel() { GroupUnique = group.Unique, UserUnique = userUnique })
             .ToList();
 
         _ = await _groupService.UpdateUserGroupAsync(group);
 
-        return group.GroupId;
+        return group.Unique;
     }
 
     /// <inheritdoc/>
-    public async Task<int?> TryCreateUser(int i)
+    public async Task<Guid?> TryCreateUser(int i)
     {
         string username = $"user-{i}{EmailDomain}";
 
         IUser? existingUser = _userService.GetByUsername(username);
+        IUserGroup? editorGroup = await _userGroupService.GetAsync(Constants.Security.EditorGroupKey)
+            ?? throw new NullReferenceException("The 'editors' user group does not exist. Please create it before running the data generator.");
 
         // we don't want to recreate existing users
         if (existingUser is not null)
         {
             existingUser.IsApproved = true;
             existingUser.IsLockedOut = false;
-            existingUser.AddGroup(_editorGroup!);
+            existingUser.AddGroup(editorGroup.ToReadOnlyGroup());
 
             _userService.Save(existingUser);
-            return existingUser.Id;
+            return existingUser.Key;
         }
 
         var identityUser = BackOfficeIdentityUser.CreateNew(_globalSettings, username, username, _globalSettings.DefaultUILanguage);
         identityUser.Name = username;
 
         IdentityResult created = await _userManager.CreateAsync(identityUser);
-        if (created.Succeeded == false)
+        if (created.Succeeded is false)
         {
             return null;
         }
 
         IdentityResult result = await _userManager.AddPasswordAsync(identityUser, username);
-        if (result.Succeeded == false)
+        if (result.Succeeded is false)
         {
             return null;
         }
@@ -174,10 +178,10 @@ internal sealed class WorkflowConfigurator : IWorkflowConfigurator
 
         user.IsApproved = true;
         user.IsLockedOut = false;
-        user.AddGroup(_editorGroup!);
+        user.AddGroup(editorGroup.ToReadOnlyGroup());
 
         _userService.Save(user);
-        return user.Id;
+        return user.Key;
     }
 
     public void SetStatus(bool generated) => _keyValueService.SetValue(GetType().FullName!, generated.ToString());

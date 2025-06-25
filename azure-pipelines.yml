@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-    - '*'
+    - 'v*/dev'
   tags:
     include:
     - release-*
@@ -17,7 +17,7 @@ parameters:
     default: false
 
 variables:
-  nodeVersion: 18.x
+  nodeVersion: 22.x
   solution: Umbraco.Workflow.DataGenerator.sln
   buildConfiguration: Release
   DOTNET_NOLOGO: true
