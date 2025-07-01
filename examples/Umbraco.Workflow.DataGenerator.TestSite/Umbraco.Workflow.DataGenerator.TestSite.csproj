@@ -1,21 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <EnablePackageValidation>false</EnablePackageValidation>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms" Version="[13.0.0, 14)" />
-    <PackageReference Include="Umbraco.Workflow" Version="[13.0.0, 14)" />
-    <!--<ProjectReference Include="..\..\..\Umbraco-Workflow-13\src\Umbraco.Workflow\Umbraco.Workflow.csproj" />-->
+    <PackageReference Include="Umbraco.Cms" VersionOverride="16.0.0" />
+    <PackageReference Include="Umbraco.TheStarterKit" VersionOveride="16.0.0" />
+    <PackageReference Include="Umbraco.Workflow" VersionOverride="16.0.0" />
     <ProjectReference Include="..\..\src\Umbraco.Workflow.DataGenerator\Umbraco.Workflow.DataGenerator.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Opt-in to app-local ICU to ensure consistent globalization APIs across different platforms -->
-    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.1" />
-    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.1" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" VersionOverride="72.1.0.3" />
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <PropertyGroup>

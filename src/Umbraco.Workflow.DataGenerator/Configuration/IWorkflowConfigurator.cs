@@ -11,7 +11,7 @@ public interface IWorkflowConfigurator
     /// <param name="groupIds"></param>
     /// <param name="groupsPerWorkflow"></param>
     /// <returns></returns>
-    Task TryAssignGroupPermissions(IContent content, List<int> groupIds, int groupsPerWorkflow);
+    Task TryAssignGroupPermissions(IContent content, IEnumerable<Guid> groupIds, int groupsPerWorkflow);
 
     /// <summary>
     /// Create an approval group with a randomish number of users.
@@ -20,7 +20,7 @@ public interface IWorkflowConfigurator
     /// <param name="userIds">Existing user ids.</param>
     /// <param name="usersPerGroup"></param>
     /// <returns></returns>
-    Task<int?> TryCreateApprovalGroups(int i, List<int> userIds, int usersPerGroup);
+    Task<Guid?> TryCreateApprovalGroups(int i, IEnumerable<Guid> userIds, int usersPerGroup);
 
     /// <summary>
     /// Create a user where the username and password are the same value,
@@ -28,7 +28,7 @@ public interface IWorkflowConfigurator
     /// Add the user to the Editors group.
     /// </summary>
     /// <param name="i"></param>
-    Task<int?> TryCreateUser(int i);
+    Task<Guid?> TryCreateUser(int i);
 
     /// <summary>
     /// Sets the flag marking test data installation.
