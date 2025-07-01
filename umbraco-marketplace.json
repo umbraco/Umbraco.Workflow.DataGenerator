@@ -1,35 +1,29 @@
 {
-    "AuthorDetails": {
-        "Description": "Umbraco Workflow Data Generator is an extension for Umbraco Workflow to generate a test/demo environment.",
-        "Url": "https://umbraco.com",
-        "ImageUrl": "https://our.umbraco.com/media/upload/0fca1f43-fdec-4067-8a0f-4c680d6f0c74/umbraco_logo_blue.png"
-    },
-    "Category": "Editor Tools",
-    "Description": "The Workflow Data Generator package installs a starter kit, generates Umbraco users, generates Workflow approval groups, assigns users to groups and assigns groups to nodes.",
-    "LicenseType": "Free",
-    "IssueTrackerUrl": "https://github.com/umbraco/Umbraco.Workflow.DataGenerator/issues",
-    "PackageType": "Package",
-    "RelatedPackages": [
-        {
-            "PackageId": "Umbraco.Workflow",
-            "Description": "Add content approval workflows to Umbraco CMS."
-        }
-    ],
-    "PackagesByAuthor": [
-        "Umbraco.Forms",
-        "Umbraco.Deploy.OnPrem",
-        "Umbraco.Commerce"
-    ],
-    "Tags": [
-        "workflow",
-        "approvals"
-    ],
-    "Screenshots": [
-        {
-            "ImageUrl": "https://umbraco.com/media/3fdf1wxl/data-generator1.jpg"
-        },
-        {
-            "ImageUrl": "https://umbraco.com/media/j0dbxf01/data-generator2.jpg"
-        }
-    ]
+  "AuthorDetails": {
+    "Description": "Umbraco Workflow Data Generator is an extension for Umbraco Workflow to generate a test/demo environment.",
+    "Url": "https://umbraco.com",
+    "ImageUrl": "https://our.umbraco.com/media/upload/0fca1f43-fdec-4067-8a0f-4c680d6f0c74/umbraco_logo_blue.png"
+  },
+  "Category": "Editor Tools",
+  "Description": "The Workflow Data Generator package installs a starter kit, generates Umbraco users, generates Workflow approval groups, assigns users to groups and assigns groups to nodes.",
+  "LicenseType": "Free",
+  "IssueTrackerUrl": "https://github.com/umbraco/Umbraco.Workflow.DataGenerator/issues",
+  "PackageType": "Package",
+  "RelatedPackages": [
+    {
+      "PackageId": "Umbraco.Workflow",
+      "Description": "Add content approval workflows to Umbraco CMS."
+    }
+  ],
+  "PackagesByAuthor": [
+    "Umbraco.Forms",
+    "Umbraco.Deploy.OnPrem",
+    "Umbraco.Commerce",
+    "Umbraco.UIBuilder",
+    "Umbraco.Engage"
+  ],
+  "Tags": [
+    "workflow",
+    "approvals"
+  ]
 }
