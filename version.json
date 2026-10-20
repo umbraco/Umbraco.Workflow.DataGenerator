@@ -8,17 +8,14 @@
   "nuGetPackageVersion": {
     "semVer": 2.0
   },
-  "publicReleaseRefSpec": [
-    "^refs/heads/main$",
-    "^refs/tags/release-"
-  ],
+  "publicReleaseRefSpec": [ "^refs/tags/release-" ],
   "cloudBuild": {
     "buildNumber": {
       "enabled": true
-    }
+    },
+    "setAllVariables": true
   },
   "release": {
-    "tagName": "release-{version}",
     "branchName": "release/{version}"
   }
 }
