@@ -1,108 +1,56 @@
+name: $(Date:yyyyMMdd).$(Rev:r)-$(Build.Reason)
+
 trigger:
+  batch: true
   branches:
     include:
-    - 'v*/dev'
+    - main
+    - v*/dev
   tags:
     include:
     - release-*
 
+pr:
+  branches:
+    include:
+    - main
+    - v*/dev
+
+resources:
+  repositories:
+  - repository: build
+    type: github
+    name: Umbraco/Umbraco.Build
+    endpoint: umbraco
+
 parameters:
-  - name: cache_nuget
-    displayName: Cache NuGet packages
-    type: boolean
-    default: false
-  - name: skipSBOM
-    displayName: Skip SBOM Generation
-    type: boolean
-    default: false
-
-variables:
-  solution: Umbraco.Workflow.DataGenerator.sln
-  buildConfiguration: Release
-  DOTNET_NOLOGO: true
-  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  DOTNET_CLI_TELEMETRY_OPTOUT: true
-  # SBOM variables
-  productGroup: 'DXP'
-  productName: 'Umbraco.Workflow.DataGenerator'
-  productVersion: 'main'
-  DT_BASE_URL: $(dtBaseUrl)
-  DT_API_KEY: $(dtApiKey)
-
-stages: 
-  - stage: Build
-    variables:
-      NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
-    jobs:
-      - job: Build
-        pool: 
-          vmImage: ubuntu-latest
-        steps:
-          # Checkout source (avoid shallow clone to calculate version height)
-          - checkout: self
-            fetchDepth: 0
-
-          # Setup build environment
-          - task: NuGetAuthenticate@1
-            displayName: Authenticate NuGet
-
-          - task: UseDotNet@2
-            displayName: Use .NET SDK from global.json
-            inputs:
-              useGlobalJson: true
-
-          # Cache and restore NuGet packages
-          - task: Cache@2
-            condition: ${{ parameters.cache_nuget }}
-            displayName: Cache NuGet packages
-            inputs:
-              key: 'nuget | "$(Agent.OS)" | **/packages.lock.json, !**/bin/**, !**/obj/**'
-              restoreKeys: |
-                nuget | "$(Agent.OS)"
-                nuget
-              path: $(NUGET_PACKAGES)
-
-          - script: dotnet restore $(solution) --locked-mode
-            displayName: Restore NuGet packages
-
-          # Build
-          - script: dotnet build $(solution) --configuration $(buildConfiguration) --no-restore -p:ContinuousIntegrationBuild=true
-            displayName: Run dotnet build
-
-          # Pack
-          - script: dotnet pack $(solution) --configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)/nupkg
-            displayName: Run dotnet pack
-
-          # Publish
-          - task: PublishPipelineArtifact@1
-            displayName: Publish NuGet packages
-            inputs:
-              targetPath: $(Build.ArtifactStagingDirectory)/nupkg
-              artifactName: nupkg
-
-          # IGNORE BUILD OUTPUT
-          # - task: PublishPipelineArtifact@1
-          #   displayName: Publish build output
-          #   inputs:
-          #     targetPath: $(Build.SourcesDirectory)
-          #     artifactName: build_output
-
-  # Generate SBOM Stage
-  # Generates Software Bill of Materials for dependency tracking.
-  # Runs in parallel after Build stage completes.
-  # Only runs on main branch unless skipSBOM parameter is checked.
-  # Note: DT_API_KEY secret variable must be configured in
-  # Azure DevOps for SBOM upload. If not configured, job
-  # will gracefully skip with a warning message.
-  - stage: GenerateSBOM
+  - name: prerelease
+    displayName: Release to MyGet
+    type: string
+    default: auto
+    values:
+      - auto # Only release to MyGet on public releases, otherwise skip
+      - prerelease # Release to MyGet pre-release feed, regardless of release type
+      - nightly # Release to MyGet nightly feed, regardless of release type
+      - skip # Skip releasing to MyGet, regardless of release type
+  - name: release
+    displayName: Release
+    type: string
+    default: auto
+    values:
+      - auto # Only release to NuGet/NPM on public releases, otherwise skip
+      - public # Release to NuGet/NPM, regardless of release type
+  # do we generate SBOM?
+  - name: sbom_generate
     displayName: Generate SBOM
-    dependsOn: Build
-    condition: |
-      and(
-        succeeded('Build'),
-        eq(variables['Build.SourceBranch'], 'refs/heads/main'),
-        ne('${{ parameters.skipSBOM }}', true)
-      )
-    jobs:
-      - template: devops/cloud-sbom.yml
+    type: boolean
+    default: false
+
+extends:
+  template: devops/templates/azure-pipelines-template.yml@build
+  parameters:
+    product_name: "Umbraco.Workflow.DataGenerator"
+    prerelease: ${{ parameters.prerelease }}
+    release: ${{ parameters.release }}
+    sbom_generate: ${{ parameters.sbom_generate }}
+    sbom_dt_variable_group: dependency-track
